@@ -20,6 +20,7 @@ function App() {
 
   const addTodo = (todo: ITodo) => {
     if (todo.description) {
+      localStorage.setItem("todos", JSON.stringify([...todos, todo]));
       setTodos([...todos, todo]);
     } else {
       alert("Please enter a description");
@@ -28,6 +29,7 @@ function App() {
 
   const deleteTodo = (id: number) => {
     const newTodos = todos.filter((todo) => todo.id !== id);
+    localStorage.setItem("todos", JSON.stringify(newTodos));
 
     setTodos(newTodos);
   };
@@ -41,6 +43,7 @@ function App() {
       return todo;
     });
 
+    localStorage.setItem("todos", JSON.stringify(newTodos));
     setTodos(newTodos);
   };
 
@@ -52,6 +55,14 @@ function App() {
     });
     setDescription("");
   };
+
+  React.useEffect(() => {
+    const todos = localStorage.getItem("todos");
+
+    if (todos) {
+      setTodos(JSON.parse(todos));
+    }
+  }, [todos]);
 
   return (
     <div className="App">
